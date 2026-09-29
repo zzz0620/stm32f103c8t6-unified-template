@@ -1,0 +1,23 @@
+# 编译文件
+*.crf
+*.d
+*.o
+*.sct
+*.htm
+*.map
+*.lnp
+*.dep
+*.axf
+*.map
+
+*.emSession
+
+# keil 文件
+*.uvoptx
+*.uvprojx
+
+
+# vscode 配置文件
+*.vscode
+
+# 其他

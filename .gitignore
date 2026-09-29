@@ -1,0 +1,32 @@
+# Local source-audit workspace (not part of the published repository)
+/source_audit/
+
+# Build output
+/build/
+/firmware/build/
+*.o
+*.d
+*.crf
+*.axf
+*.elf
+*.hex
+*.bin
+*.map
+*.lst
+*.lnp
+*.dep
+*.htm
+*.html
+
+# Keil per-user/generated state
+*.uvguix.*
+*.uvoptx
+*.scvd
+*.dbgconf
+/firmware/MDK-ARM/stm32f103_template/
+
+# Editor/OS metadata
+.DS_Store
+Thumbs.db
+.vscode/ipch/
+
