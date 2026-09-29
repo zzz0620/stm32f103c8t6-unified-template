@@ -9,6 +9,8 @@
 > GitHub 仓库标准名称：`stm32f103c8t6-unified-template`  
 > 默认固件 Target：`stm32f103_template`
 
+仓库地址：<https://github.com/zzz0620/stm32f103c8t6-unified-template>
+
 这是将 **NUN_DX STM32F103 开源库**与 **rm2026 飞镖称重工程**整合后的可部署模板。默认固件保留称重板的 CubeMX、FreeRTOS、双串口称重、OLED、CAN、PWM 和 GPIO 配置，同时把 NUN_DX 的驱动、传感器、执行器、PID 与状态机迁入统一组件目录。
 
 目标不是把所有功能强耦合在 `main.c`，而是提供稳定的应用入口与可替换的板级适配层：
@@ -52,11 +54,12 @@
 
 ## 最快上手：Keil
 
-1. 安装 Keil MDK 5 与 STM32F1 Device Family Pack。
-2. 打开 `firmware/MDK-ARM/stm32f103_template.uvprojx`。
-3. 选择 `stm32f103_template` Target，执行 Rebuild。
-4. 在 Options for Target 中选择自己的 ST-Link/J-Link，确认芯片为 STM32F103C8Tx。
-5. 烧录后用 USART3（PB10/PB11，115200 8N1）观察 `printf` 输出；USART1（PB6/PB7，230400 8N1）用于称重模块通信。
+1. 克隆仓库：`git clone https://github.com/zzz0620/stm32f103c8t6-unified-template.git`。
+2. 安装 Keil MDK 5 与 STM32F1 Device Family Pack。
+3. 打开 `firmware/MDK-ARM/stm32f103_template.uvprojx`。
+4. 选择 `stm32f103_template` Target，执行 Rebuild。
+5. 在 Options for Target 中选择自己的 ST-Link/J-Link，确认芯片为 STM32F103C8Tx。
+6. 烧录后用 USART3（PB10/PB11，115200 8N1）观察 `printf` 输出；USART1（PB6/PB7，230400 8N1）用于称重模块通信。
 
 Keil 工程可重复生成：
 

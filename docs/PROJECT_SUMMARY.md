@@ -4,6 +4,8 @@
 
 计划发布仓库名：`stm32f103c8t6-unified-template`（GitHub 小写短横线命名）；本地目录继续使用工作区编号规范。
 
+公开仓库：<https://github.com/zzz0620/stm32f103c8t6-unified-template>。发布者已于 2026-09-29 确认第二工程与 ZDT 代码的公开权利。
+
 ## 当前成果
 
 - 以 rm2026 称重项目的 STM32F103C8T6 CubeMX/FreeRTOS 配置为可部署基线。
