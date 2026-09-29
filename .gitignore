@@ -15,6 +15,7 @@
 *.lst
 *.lnp
 *.dep
+*.log
 *.htm
 *.html
 
