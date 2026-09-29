@@ -14,7 +14,7 @@
 
 # keil 文件
 *.uvoptx
-*.uvprojx
+# .uvprojx 是可重建工程的必要输入，必须纳入版本控制。
 
 
 # vscode 配置文件
