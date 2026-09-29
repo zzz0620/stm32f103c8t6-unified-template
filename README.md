@@ -1,4 +1,13 @@
-# STM32F103C8T6 模板仓库
+# STM32F103C8T6 Unified Template
+
+[![MCU](https://img.shields.io/badge/MCU-STM32F103C8T6-03234B)](https://www.st.com/en/microcontrollers-microprocessors/stm32f103c8.html)
+[![Toolchain](https://img.shields.io/badge/toolchain-Keil%20MDK%20%7C%20GNU%20Arm-blue)](#已验证基线)
+[![License](https://img.shields.io/badge/license-AGPL--3.0--only-orange)](LICENSE)
+
+面向 STM32F103C8T6 的低耦合、可上板、可学习的统一工程模板。
+
+> GitHub 仓库标准名称：`stm32f103c8t6-unified-template`  
+> 默认固件 Target：`stm32f103_template`
 
 这是将 **NUN_DX STM32F103 开源库**与 **rm2026 飞镖称重工程**整合后的可部署模板。默认固件保留称重板的 CubeMX、FreeRTOS、双串口称重、OLED、CAN、PWM 和 GPIO 配置，同时把 NUN_DX 的驱动、传感器、执行器、PID 与状态机迁入统一组件目录。
 
@@ -11,6 +20,25 @@
   -> Core/Src/stm32_template_port.c（板级适配）
   -> NUN_DX / 称重任务 / STM32 HAL
 ```
+
+## 特性
+
+- 一个稳定的应用入口：初始化和数据读取不暴露具体 CubeMX 句柄。
+- 一个板级适配文件：换板时集中修改映射，不改设备层和业务层。
+- 两套可重建工程：新 Keil MDK 工程与 GCC/CMake 工程。
+- 一个中央模块配置：按需启用传感器、显示、电机和控制模块。
+- 完整来源可追溯：保留两个输入工程的配置、源码、库与原 README。
+- 面向真实部署：记录引脚、电气、资源、许可和实物验证边界。
+
+## 导航
+
+- [已验证基线](#已验证基线)
+- [最快上手：Keil](#最快上手keil)
+- [最快上手：统一读取接口](#最快上手统一读取接口)
+- [启用模块](#启用模块)
+- [GCC 构建](#gcc-构建)
+- [文档索引](#文档索引)
+- [许可](#许可)
 
 ## 已验证基线
 
