@@ -2,12 +2,12 @@
 
 ## 统一入口
 
-头文件：`firmware/Components/Template/stm32_template.h`
+头文件：`legacy/nun_dx_original/components/template/stm32_template.h`
 
 | API | 用途 | 约束 |
 | --- | --- | --- |
 | `stm32_template_init()` | 绑定 CubeMX 外设句柄并初始化已启用的无参数传感器 | HAL 外设初始化后调用一次 |
-| `stm32_template_read(&data)` | 复制称重快照并读取启用的传感器 | 返回 `valid_mask`；同步 I2C，不在 ISR 调用 |
+| `stm32_template_read(&data)` | 主动轮询测力模块并读取启用的传感器 | 返回 `valid_mask`；同步 UART/I2C，不在 ISR 调用 |
 | `stm32_template_port_get()` | 提供板级外设和业务数据适配 | 新板只实现这个窄接口 |
 
 统一结构 `stm32_template_data_t` 有固定 ABI。未启用或读取失败的字段保持 0，并通过 `valid_mask` 判断，不能仅靠数值判断有效性。
@@ -16,7 +16,7 @@
 
 | 开关 | 模块 | 总线/资源 | 统一返回 |
 | --- | --- | --- | --- |
-| `TEMPLATE_USE_LOADCELL` | 双路称重 | USART1 + DMA/任务 | 通道值、合计、状态、单位、小数位 |
+| `TEMPLATE_USE_LOADCELL` | 双路称重 | USART1，裸机同步 Modbus | 通道值、合计、状态、单位、小数位 |
 | `DX_USE_AHT10` | 温湿度 | I2C，0x38 | ℃、%RH |
 | `DX_USE_AS5600` | 磁编码器 | I2C，0x36 | 角度 °；无磁铁不置有效位 |
 | `DX_USE_BH1750` | 光照 | I2C，0x23 | lux；通信失败不置有效位 |

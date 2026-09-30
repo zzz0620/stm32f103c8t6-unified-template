@@ -1,36 +1,41 @@
 # 项目总结
 
-更新时间：2026-09-29
+更新时间：2026-10-01
 
-计划发布仓库名：`stm32f103c8t6-unified-template`（GitHub 小写短横线命名）；本地目录继续使用工作区编号规范。
+公开仓库：<https://github.com/zzz0620/stm32f103c8t6-unified-template>。发布者已确认拥有或获授权公开第二份称重工程与 ZDT 代码。
 
-公开仓库：<https://github.com/zzz0620/stm32f103c8t6-unified-template>。发布者已于 2026-09-29 确认第二工程与 ZDT 代码的公开权利。
+## 最终成果
 
-## 当前成果
+- 唯一可部署工程位于 `legacy/nun_dx_original`，同时提供 Keil、CubeMX 和 GCC/CMake 入口。
+- 默认固件为裸机实现，不依赖 FreeRTOS；USART1 直接轮询双通道 Modbus 测力传感器。
+- 所有模块统一由 `Core/Inc/stm32_template_config.h` 控制，默认仅启用测力模块。
+- `components/template` 提供稳定 facade，`Core/Src/stm32_template_port.c` 隔离 CubeMX 句柄，模块之间不直接耦合。
+- NUN_DX 的设备、基础驱动、PID、FIFO、状态机和已适配 ZDT 驱动均保留，可按宏选择。
+- README 已给出模块名称、宏、默认引脚、接线、构建和部署方法。
+- 工程自有目录使用小写 `snake_case`；CubeMX、Keil 约定目录和 NUN_DX `DX_*` 公共 API 保持兼容命名。
 
-- 以 rm2026 称重项目的 STM32F103C8T6 CubeMX/FreeRTOS 配置为可部署基线。
-- 迁移 NUN_DX 的基础驱动、设备、PID、状态机、调试和公共模块。
-- 增加 `stm32_template_*` 稳定入口与板级 port，减少业务层和硬件句柄耦合。
-- 新建 Keil 工程，并增加 GCC/CMake 构建、启动文件和链接脚本。
-- 恢复与原工程版本一致的 HAL ADC/SPI 与 FreeRTOS GCC Cortex-M3 port。
-- 保留原始来源、README、许可和第三方声明，记录不可直接用于 F103 的遗留文件。
+## 清理结果
+
+- 删除旧 `firmware` 工程、迁移前重复快照、旧 Keil/CubeMX 工程与用户态 IDE 文件。
+- 删除 FreeRTOS、旧任务层、F4 Flash 草稿、重复头文件和未参与构建的原始 ZDT 串口示例。
+- 精简 HAL/CMSIS 到 STM32F103C8 当前构建需要的文件；保留许可证、来源 README 和审计记录。
+- 迁移前内容仍可从 Git 提交 `08b1ea2` 审计或恢复。
 
 ## 验证结果
 
 | 验证项 | 结果 |
 | --- | --- |
-| Keil MDK 全量 Rebuild | 通过，0 error / 0 warning；Code 33884，RO 2884，RW 264，ZI 13816 |
-| GCC Release 构建 | 通过，0 warning；Flash 46112 / 65536，RAM 14800 / 20480 |
-| 11 个 NUN_DX 设备开关逐项编译 | 全部通过；期间发现并解除舵机测试对按键模块的隐式依赖 |
-| 11 个设备开关同时开启的编译/链接检查 | 通过；Flash 47676 / 65536，RAM 16752 / 20480；未引用执行器代码会被链接器回收 |
-| CubeMX 配置存在 | 通过，芯片 STM32F103C8Tx、72 MHz |
-| 统一 API 与 port 解耦 | 通过静态检查和双工具链编译 |
-| 实物烧录与外设联调 | 未执行；当前环境未连接目标板 |
+| GCC Release 默认裸机配置 | 通过，0 warning；Flash 27,920 / 65,536 B，RAM 3,608 / 20,480 B |
+| Keil ARMCC 5.06 默认裸机配置 | 通过，0 error / 0 warning；Code 13,326 B，RO 310 B，RW 40 B，ZI 2,856 B |
+| 全模块宏组合交叉编译 | 通过，0 warning；Flash 45,972 / 65,536 B，RAM 6,128 / 20,480 B |
+| 关闭测力模块的宏组合 | 通过，0 warning；确认主循环不会留下未使用变量 |
+| Keil 路径检查 | 通过；源码与包含目录均为相对路径，所有路径存在，无旧目标名 |
+| 实物烧录与传感器联调 | 未执行；当前环境未连接目标板 |
 
-## 风险与后续
+## 风险与部署检查
 
-- RAM 默认占用约 72%，增加 RTOS 任务、队列或大缓冲区时必须重新检查堆栈水位与链接结果。
-- 可选模块需要逐一做实物电气和协议验证，特别是电机、CAN、称重标定和 ZDT 回包。
-- 公开 GitHub 前需要发布者确认第二份工程和 ZDT 示例的权利状态。
-- 修改 `.ioc` 重新生成代码后，应重新运行 Keil 工程生成脚本并用两种工具链 Rebuild。
+- 软件编译通过不能代替实物验证；首次上板必须核对 RS485 A/B、地址 1、230400 8N1、供电和共地。
+- 默认假设 RS485 收发器自动控制方向；需要 DE/RE 的板卡必须在配置头中启用并填写实际 GPIO。
+- 全模块可编译不代表可同时接线；启用前按 `docs/PINOUT.md` 解决 USART、I2C、PWM 和 CAN 引脚冲突。
+- 传感器力值准确度依赖变送器标定和单位/小数位寄存器，必须用已知砝码完成现场复核。
 

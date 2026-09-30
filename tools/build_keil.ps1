@@ -7,20 +7,24 @@ $ErrorActionPreference = 'Stop'
 
 if ([string]::IsNullOrWhiteSpace($Uv4Path)) {
     $candidates = @(
+        $env:KEIL_UV4_PATH,
         'E:\Keil_v5\MDK\UV4\UV4.exe',
+        'E:\Keil_v5\UV4\UV4.exe',
         'C:\Keil_v5\UV4\UV4.exe',
         'C:\Program Files (x86)\Keil_v5\UV4\UV4.exe'
-    )
-    $Uv4Path = $candidates | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+    ) | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    $Uv4Path = $candidates |
+        Where-Object { Test-Path -LiteralPath $_ } |
+        Select-Object -First 1
 }
 
 if ([string]::IsNullOrWhiteSpace($Uv4Path) -or -not (Test-Path -LiteralPath $Uv4Path)) {
-    throw 'Keil UV4.exe was not found. Pass -Uv4Path with the installed executable.'
+    throw 'Keil UV4.exe was not found. Set KEIL_UV4_PATH or pass -Uv4Path with the installed executable.'
 }
 
 & (Join-Path $PSScriptRoot 'generate_keil_project.ps1') -ProjectRoot $ProjectRoot | Out-Null
 
-$project = Join-Path $ProjectRoot 'firmware\MDK-ARM\stm32f103_template.uvprojx'
+$project = Join-Path $ProjectRoot 'legacy\nun_dx_original\MDK-ARM\stm32f103_template.uvprojx'
 $buildDirectory = Join-Path $ProjectRoot 'build'
 $log = Join-Path $buildDirectory 'keil_build.log'
 New-Item -ItemType Directory -Path $buildDirectory -Force | Out-Null

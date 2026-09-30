@@ -1,83 +1,168 @@
+/* USER CODE BEGIN Header */
 /**
- * @file    main.c
- * @author  YCZ
- * @date    2026-08-01
- * @brief   主程序入口
- *          完成系统时钟配置、外设初始化,并进入主循环
- */
-
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * Copyright (c) 2026 STMicroelectronics.
+  * All rights reserved.
+  *
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "DX_common_headfile.h"
+#include "can.h"
+#include "dma.h"
+#include "i2c.h"
+#include "tim.h"
+#include "usart.h"
+#include "gpio.h"
 
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
+#include "stm32_template.h"
+#include "stm32_template_config.h"
+#if TEMPLATE_USE_DART_OLED_UI
+#include "oled_ui.h"
+#endif
 
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
+
+/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+/* USER CODE BEGIN PFP */
+
+/* USER CODE END PFP */
+
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
+/* Kept global so the latest sample is easy to inspect in a debugger. */
+stm32_template_data_t g_stm32_template_data;
+
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
 
-  HAL_Init();                  /* HAL 库初始化(配置 SysTick 等)            */
+  /* USER CODE BEGIN 1 */
 
-  SystemClock_Config();        /* 系统时钟配置(72MHz)                      */
-	
-  debug_init();                /* 调试串口初始化                            */
-	
-  printf("System ready\r\n");  /* 打印系统就绪信息                          */
+  /* USER CODE END 1 */
 
-	
-//	DX_GPIO_Test(); /* GPIO 测试函数       */
-// 	adc_test ();	/* 读取 ADC 通道测试函数           */	
-// tim_trigger_test ();  /* 定时器触发测试        */	
-	key_test();				/* 按键触发触发测试        */	
-	
-	
+  /* MCU Configuration--------------------------------------------------------*/
 
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+  HAL_Init();
+
+  /* USER CODE BEGIN Init */
+
+  /* USER CODE END Init */
+
+  /* Configure the system clock */
+  SystemClock_Config();
+
+  /* USER CODE BEGIN SysInit */
+
+  /* USER CODE END SysInit */
+
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+#if TEMPLATE_BOARD_DMA_ENABLED
+  MX_DMA_Init();
+#endif
+#if TEMPLATE_BOARD_I2C1_ENABLED
+  MX_I2C1_Init();
+#endif
+#if TEMPLATE_BOARD_USART1_ENABLED
+  MX_USART1_UART_Init();
+#endif
+#if TEMPLATE_BOARD_USART3_ENABLED
+  MX_USART3_UART_Init();
+#endif
+#if TEMPLATE_USE_BOARD_PWM
+  MX_TIM2_Init();
+  MX_TIM3_Init();
+#endif
+#if TEMPLATE_BOARD_CAN_ENABLED
+  MX_CAN_Init();
+#endif
+  /* USER CODE BEGIN 2 */
+  stm32_template_init();
+#if TEMPLATE_USE_DART_OLED_UI
+  oled_ui_init();
+#endif
+
+  /* USER CODE END 2 */
+
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+#if TEMPLATE_USE_LOADCELL
+  uint32_t last_loadcell_poll_ms = HAL_GetTick() - TEMPLATE_LOADCELL_POLL_INTERVAL_MS;
+#endif
   while (1)
   {
+    /* USER CODE END WHILE */
 
-		
+    /* USER CODE BEGIN 3 */
+#if TEMPLATE_USE_LOADCELL
+    if ((HAL_GetTick() - last_loadcell_poll_ms) >= TEMPLATE_LOADCELL_POLL_INTERVAL_MS)
+    {
+      last_loadcell_poll_ms = HAL_GetTick();
+      (void)stm32_template_read(&g_stm32_template_data);
+    }
+#endif
+#if TEMPLATE_USE_DART_OLED_UI
+    oled_ui_task();
+#endif
+    HAL_Delay(1U);
   }
-
+  /* USER CODE END 3 */
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
   RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-
-  /* 振荡器配置:使用 HSE 外部晶振,PLL 倍频 9 倍 */
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
@@ -90,8 +175,8 @@ void SystemClock_Config(void)
     Error_Handler();
   }
 
-
-  /* 时钟源配置:SYSCLK 取自 PLL,AHB 不分频,APB1 二分频,APB2 不分频 */
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
   RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
                               |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
   RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
@@ -105,27 +190,47 @@ void SystemClock_Config(void)
   }
 }
 
+/* USER CODE BEGIN 4 */
 
+/* USER CODE END 4 */
 
 /**
- * @brief  错误处理函数
- *         在 HAL 库初始化失败时调用,关闭全局中断后死循环
- * @retval 无
- */
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM1 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM1) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
 void Error_Handler(void)
 {
-
-  __disable_irq();             /* 关闭全局中断 */
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
   while (1)
   {
   }
-
+  /* USER CODE END Error_Handler_Debug */
 }
 
-
-
-
-#ifdef USE_FULL_ASSERT
+#ifdef  USE_FULL_ASSERT
 /**
   * @brief  Reports the name of the source file and the source line number
   *         where the assert_param error has occurred.

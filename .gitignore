@@ -3,7 +3,7 @@
 
 # Build output
 /build/
-/firmware/build/
+/legacy/nun_dx_original/build/
 *.o
 *.d
 *.crf
@@ -24,7 +24,7 @@
 *.uvoptx
 *.scvd
 *.dbgconf
-/firmware/MDK-ARM/stm32f103_template/
+/legacy/nun_dx_original/MDK-ARM/stm32f103_template/
 
 # Editor/OS metadata
 .DS_Store

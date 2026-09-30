@@ -6,15 +6,15 @@ set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
-set(FW ${CMAKE_CURRENT_SOURCE_DIR}/firmware)
+set(FW ${CMAKE_CURRENT_SOURCE_DIR}/legacy/nun_dx_original)
 
 file(GLOB NUN_COMMON_SOURCES CONFIGURE_DEPENDS
-    ${FW}/Components/NUN_DX/common/*.c
-    ${FW}/Components/NUN_DX/control/*.c
-    ${FW}/Components/NUN_DX/debug/*.c
-    ${FW}/Components/NUN_DX/device/*.c
-    ${FW}/Components/NUN_DX/driver/*.c
-    ${FW}/Components/NUN_DX/state_machine/*.c)
+    ${FW}/components/nun_dx/common/*.c
+    ${FW}/components/nun_dx/control/*.c
+    ${FW}/components/nun_dx/debug/*.c
+    ${FW}/components/nun_dx/device/*.c
+    ${FW}/components/nun_dx/driver/*.c
+    ${FW}/components/nun_dx/state_machine/*.c)
 
 set(CORE_SOURCES
     ${FW}/Core/Src/main.c
@@ -24,9 +24,6 @@ set(CORE_SOURCES
     ${FW}/Core/Src/usart.c
     ${FW}/Core/Src/tim.c
     ${FW}/Core/Src/can.c
-    ${FW}/Core/Src/freertos.c
-    ${FW}/Core/Src/iic_task.c
-    ${FW}/Core/Src/usart_tsak.c
     ${FW}/Core/Src/stm32_template_port.c
     ${FW}/Core/Src/syscalls.c
     ${FW}/Core/Src/stm32f1xx_it.c
@@ -35,11 +32,12 @@ set(CORE_SOURCES
     ${FW}/Core/Src/system_stm32f1xx.c)
 
 set(APP_SOURCES
-    ${FW}/Components/Template/stm32_template.c
-    ${FW}/Object/loadcell.c
-    ${FW}/Object/font.c
-    ${FW}/Object/oled.c
-    ${FW}/Object/oled_ui.c)
+    ${FW}/components/template/stm32_template.c
+    ${FW}/components/loadcell/loadcell.c
+    ${FW}/components/loadcell/loadcell_service.c
+    ${FW}/app/dart_board/font.c
+    ${FW}/app/dart_board/oled.c
+    ${FW}/app/dart_board/oled_ui.c)
 
 set(HAL_SOURCES
     ${FW}/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal.c
@@ -62,44 +60,28 @@ set(HAL_SOURCES
     ${FW}/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_tim_ex.c
     ${FW}/Drivers/STM32F1xx_HAL_Driver/Src/stm32f1xx_hal_uart.c)
 
-set(FREERTOS_SOURCES
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/croutine.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/event_groups.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/list.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/queue.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/tasks.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/timers.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3/port.c)
-
 add_executable(stm32f103_template
     ${CORE_SOURCES}
     ${APP_SOURCES}
     ${NUN_COMMON_SOURCES}
     ${HAL_SOURCES}
-    ${FREERTOS_SOURCES}
     ${FW}/Startup/startup_stm32f103xb.s)
 
 target_include_directories(stm32f103_template PRIVATE
     ${FW}/Core/Inc
-    ${FW}/Object
-    ${FW}/Components/Template
-    ${FW}/Components/NUN_DX/common
-    ${FW}/Components/NUN_DX/control
-    ${FW}/Components/NUN_DX/debug
-    ${FW}/Components/NUN_DX/device
-    ${FW}/Components/NUN_DX/driver
-    ${FW}/Components/NUN_DX/state_machine
-    ${FW}/Components/NUN_DX/zdt
+    ${FW}/app/dart_board
+    ${FW}/components/template
+    ${FW}/components/loadcell
+    ${FW}/components/nun_dx/common
+    ${FW}/components/nun_dx/control
+    ${FW}/components/nun_dx/debug
+    ${FW}/components/nun_dx/device
+    ${FW}/components/nun_dx/driver
+    ${FW}/components/nun_dx/state_machine
     ${FW}/Drivers/STM32F1xx_HAL_Driver/Inc
     ${FW}/Drivers/STM32F1xx_HAL_Driver/Inc/Legacy
     ${FW}/Drivers/CMSIS/Device/ST/STM32F1xx/Include
-    ${FW}/Drivers/CMSIS/Include
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/include
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS
-    ${FW}/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM3)
+    ${FW}/Drivers/CMSIS/Include)
 
 target_compile_definitions(stm32f103_template PRIVATE
     USE_HAL_DRIVER

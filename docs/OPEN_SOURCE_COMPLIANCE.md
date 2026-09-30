@@ -27,16 +27,15 @@
 
 - STM32F1 HAL：随 STM32CubeF1 包的条款；包外使用时其 `LICENSE.txt` 指向 BSD-3-Clause。
 - CMSIS Core/Device：Apache-2.0 或文件中随附的 ST 条款。
-- FreeRTOS Kernel：MIT。
-- ZDT Emm_V5 示例在源码注释中标注了原作者/商家，但未发现单独许可证；发布者已于 2026-09-29 明确确认拥有公开和再分发权利。建议长期保存相应授权凭据。
+- ZDT Emm_V5 协议实现的源码注释中标注了原作者/商家，但未发现单独许可证；发布者已于 2026-09-29 明确确认拥有或获授权公开和再分发。建议长期保存相应授权凭据。
 
 完整路径和版本见 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md)。
 
 ## 公开发布前清单
 
 - [x] 保留原始 AGPL v3 文本为根目录 `LICENSE`。
-- [x] 保留 NUN_DX 原作者标注和来源快照。
-- [x] 在 `NOTICE.md` 标注 2026-09-29 的整合与修改。
+- [x] 保留 NUN_DX 原作者标注、来源 README、哈希和 Git 提交号。
+- [x] 在 `NOTICE.md` 标注 2026-09-29 至 2026-10-01 的整合与修改。
 - [x] 提供可重建的 Keil 工程、CubeMX `.ioc`、CMake、链接脚本和源代码。
 - [x] 提供第三方组件声明。
 - [x] 发布者于 2026-09-29 明确确认有权公开第二份称重工程。

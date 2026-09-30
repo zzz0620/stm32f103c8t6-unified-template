@@ -1,6 +1,6 @@
 # 默认引脚与资源冲突
 
-以下来自 `firmware/stm32f103_template.ioc`，是默认称重板基线。实际 PCB 若不同，应先修改 `.ioc`，再调整板级 port。
+以下来自 `legacy/nun_dx_original/stm32f103_template.ioc`，是默认称重板基线。实际 PCB 若不同，应先修改 `.ioc`，再调整板级 port。
 
 | 引脚 | 默认功能 | 说明 |
 | --- | --- | --- |
