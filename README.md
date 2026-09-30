@@ -160,4 +160,6 @@ tools/                           工程生成与构建脚本
 
 ## 许可
 
-本整合仓库按 GNU AGPL v3 发布，见 [LICENSE](LICENSE)。NUN_DX 原作者信息、第三方组件许可证与修改说明均保留。用户已确认拥有或获授权公开第二份称重工程及 ZDT 代码；具体来源与声明见 [开源合规说明](docs/OPEN_SOURCE_COMPLIANCE.md)。
+本仓库的项目所有者、最终维护者和原创整合部分权利人为 **zzz**，完整边界见 [著作权、项目权属与许可声明](COPYRIGHT.md)。
+
+本整合仓库按 GNU AGPL v3 发布，见 [LICENSE](LICENSE)。开源许可不构成 `zzz` 将著作权、官方仓库控制权或维护者身份转让给第三方；同时，NUN_DX、STM32 HAL/CMSIS、ZDT 等第三方内容的既有权利仍归各自权利人所有。具体来源与声明见 [第三方组件声明](THIRD_PARTY_NOTICES.md)和[开源合规说明](docs/OPEN_SOURCE_COMPLIANCE.md)。

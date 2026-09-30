@@ -1,5 +1,9 @@
 # Notice and modification record
 
+Project owner, official publisher and lead maintainer: **zzz**.
+
+Copyright © 2026 zzz for the original integration, adapters, build configuration and documentation contributed by zzz. Third-party copyrights remain with their respective holders. See `COPYRIGHT.md` for the complete ownership boundary.
+
 This project incorporates the NUN_DX STM32F103 library attributed in its source files to YCZ / 杨长治. The integrated source is under `legacy/nun_dx_original/components/nun_dx/`; original README material and source hashes are retained for traceability.
 
 Integration modifications made from 2026-09-29 through 2026-10-01 include:

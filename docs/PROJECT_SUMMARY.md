@@ -4,6 +4,8 @@
 
 公开仓库：<https://github.com/zzz0620/stm32f103c8t6-unified-template>。发布者已确认拥有或获授权公开第二份称重工程与 ZDT 代码。
 
+项目所有者、最终维护者及原创整合部分权利人统一署名为 `zzz`；权利边界记录在根目录 `COPYRIGHT.md`，第三方组件既有权利不受影响。
+
 ## 最终成果
 
 - 唯一可部署工程位于 `legacy/nun_dx_original`，同时提供 Keil、CubeMX 和 GCC/CMake 入口。
